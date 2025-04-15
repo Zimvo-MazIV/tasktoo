@@ -1,0 +1,24 @@
+repository url: https://github.com/Zimvo-MazIV/tasktoo
+
+PROMPTS: 
+
+>>1. Hello Chat I'd like for you to create an application for me that reads a file
+Response: 
+	Absolutely! I can help with that. To get started, I just need a few details from you:
+	
+	1. **What kind of file** do you want the application to read? (e.g., `.txt`, `.csv`, `.json`, etc.)
+	2. **What should the app do** with the file's contents? (e.g., display it, search it, analyze it, convert it)
+	3. Do you have a **preferred programming language or framework**? (e.g., Python, JavaScript, etc.)
+	4. Should this be a **command-line app**, a **web app**, or a **desktop GUI**?
+
+	Once I have those details, we can start building it step by step (or I can generate the full code if you’d 	prefer that).
+
+>>2.  1. The kind of file is an xml file 2. The app should print the file contents 3. Using the Java language, this is a command-line app
+
+>>3. Now we are going to switch things up a bit and introduce user-selected fields from the XML File.
+>>4. Each record has the following fields: name, postalZip, region, country, address and list.
+>>5. Now change the format of the user fields.
+>>6. The format should be the JSON format.
+>>7. What will occur if a user inputs the wrong field or misspells a field? can you fix this?
+>>8. Is it possible to switch to a different parser?
+>>9. switch to the SAX XML parser. 
