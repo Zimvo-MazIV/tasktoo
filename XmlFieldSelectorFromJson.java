@@ -54,6 +54,8 @@ public class XmlFieldSelectorFromJson {
     // A minimal JSON parser to get fields from a very basic file
     private static List<String> loadFieldsFromJson(String jsonFilePath) {
         List<String> fields = new ArrayList<>();
+        Set<String> invalidFields = new HashSet<>();
+        
         try (BufferedReader reader = new BufferedReader(new FileReader(jsonFilePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -70,7 +72,7 @@ public class XmlFieldSelectorFromJson {
                             if (ALLOWED_FIELDS.contains(field)) {
                                 fields.add(field);
                             } else {
-                                System.out.println("Ignored invalid field: " + field);
+                                invalidFields.add(field);
                             }
                         }
                     }
@@ -79,6 +81,15 @@ public class XmlFieldSelectorFromJson {
         } catch (IOException e) {
             System.err.println("Error reading JSON file: " + e.getMessage());
         }
+
+        if (!invalidFields.isEmpty()) {
+            System.out.println("The following fields are invalid or misspelled: ");
+            for (String invalidField : invalidFields) {
+                System.out.println("  " + invalidField);
+            }
+            System.out.println("These fields will be ignored.");
+        }
+
         return fields;
     }
 
@@ -90,6 +101,7 @@ public class XmlFieldSelectorFromJson {
         return "[Not Found]";
     }
 }
+
 
 
 
