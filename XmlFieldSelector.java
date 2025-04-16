@@ -1,9 +1,13 @@
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
 import java.io.File;
-import java.util.Scanner;
+import java.util.*;
 
 public class XmlFieldSelector {
+
+    private static final List<String> ALLOWED_FIELDS = Arrays.asList(
+        "name", "postalZip", "region", "country", "address", "list"
+    );
 
     public static void main(String[] args) {
         if (args.length != 1) {
@@ -22,23 +26,38 @@ public class XmlFieldSelector {
             Document doc = dBuilder.parse(xmlFile);
             doc.getDocumentElement().normalize();
 
-            // Assuming the root has multiple child elements like <employee>
-            String parentTag = doc.getDocumentElement().getFirstChild().getNodeName();
-            NodeList nodeList = doc.getElementsByTagName(parentTag);
+            NodeList records = doc.getElementsByTagName("record");
 
-            System.out.println("Enter the field/tag names you want to extract (comma-separated):");
+            // Ask user for fields to extract
+            System.out.println("Available fields: " + String.join(", ", ALLOWED_FIELDS));
+            System.out.print("Enter the field/tag names you want to extract (comma-separated): ");
             String input = scanner.nextLine();
-            String[] fields = input.split(",");
+            String[] userFields = input.split(",");
 
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                Node node = nodeList.item(i);
+            List<String> selectedFields = new ArrayList<>();
+            for (String field : userFields) {
+                field = field.trim();
+                if (ALLOWED_FIELDS.contains(field)) {
+                    selectedFields.add(field);
+                } else {
+                    System.out.println("Ignored invalid field: " + field);
+                }
+            }
+
+            if (selectedFields.isEmpty()) {
+                System.out.println("No valid fields selected. Exiting.");
+                return;
+            }
+
+            // Print selected fields
+            for (int i = 0; i < records.getLength(); i++) {
+                Node node = records.item(i);
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
                     Element element = (Element) node;
-                    System.out.println("Entry " + (i + 1) + ":");
-                    for (String field : fields) {
-                        String tag = field.trim();
-                        String value = getTagValue(tag, element);
-                        System.out.println("  " + tag + ": " + value);
+                    System.out.println("Record " + (i + 1) + ":");
+                    for (String field : selectedFields) {
+                        String value = getTagValue(field, element);
+                        System.out.println("  " + field + ": " + value);
                     }
                     System.out.println();
                 }
@@ -51,13 +70,13 @@ public class XmlFieldSelector {
 
     private static String getTagValue(String tag, Element element) {
         NodeList tagList = element.getElementsByTagName(tag);
-        if (tagList.getLength() > 0) {
-            Node node = tagList.item(0);
-            return node.getTextContent();
+        if (tagList.getLength() > 0 && tagList.item(0).getFirstChild() != null) {
+            return tagList.item(0).getTextContent();
         }
         return "[Not Found]";
     }
 }
+
 
 
 
