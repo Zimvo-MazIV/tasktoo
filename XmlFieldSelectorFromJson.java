@@ -87,7 +87,7 @@ public class XmlFieldSelectorFromJson {
             for (String invalidField : invalidFields) {
                 System.out.println("  " + invalidField);
             }
-            System.out.println("These fields will be ignored.");
+            System.out.println("These fields completely will be ignored.");
         }
 
         return fields;
